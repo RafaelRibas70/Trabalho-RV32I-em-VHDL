@@ -13,14 +13,11 @@ end entity;
 
 architecture arch_shif_left_1 of shif_left_1 is 
 
-signal w_perca : std_logic;	
-
 begin 
-
+	
+	o_saida_imediato(0) <= '0';
 	gen_and32 : for i in 0 to 30 generate
             o_saida_imediato(i+1) <= i_entrada_imediato(i);
    end generate gen_and32;
-	
-	w_perca<= i_entrada_imediato(31);
 	
 end architecture; 
