@@ -132,8 +132,8 @@ port map(
   o_S   => o_S
 );
 
-o_Overflow <= w_overflow_add when i_SEL = "0000" else  -- ADD
-              w_overflow_sub when i_SEL = "0001" else  -- SUB
+o_Overflow <= w_overflow_add when i_SEL = "000" else  -- ADD
+              w_overflow_sub when i_SEL = "001" else  -- SUB
               '0';
 
 
@@ -144,5 +144,4 @@ port map(
 );
 
 end architecture;
-
 
