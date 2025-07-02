@@ -15,7 +15,7 @@ end entity;
 
 architecture arch_ULA of ULA is
 
-signal w_Sadd, w_Ssub, w_Sand, w_Sxor, w_Sor, w_Sslt, w_Ssll, w_Ssrl, w_Ssra, w_Sslt : std_logic_vector(31 downto 0);
+signal w_Sadd, w_Ssub, w_Sand, w_Sxor, w_Sor, w_Sslt, w_Ssll, w_Ssrl, w_Ssra : std_logic_vector(31 downto 0);
 signal w_overflow_add, w_overflow_sub : std_logic;
 
 component add32 is
@@ -57,7 +57,9 @@ component slt32 is
 port (
  i_A    : in std_logic_vector (31 downto 0);
  i_B    : in std_logic_vector (31 downto 0);
- o_S    : out std_logic_vector (31 downto 0);
+ o_S    : out std_logic_vector (31 downto 0)
+);
+end component; 
 
 component mux32_8x1 is
 port (
@@ -127,7 +129,7 @@ u_slt : slt32
 port map(
   i_A => i_A,
   i_B => i_B,
-  i_S => w_Sslt
+  o_S => w_Sslt
 );
 
 u_mux8x1 : mux32_8x1
