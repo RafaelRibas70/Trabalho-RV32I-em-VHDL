@@ -28,9 +28,12 @@ process
 begin
     w_RST <= '1';
 	 w_CLK <= '0';
+wait for 1000 ns;
 	 w_RST <= '1';
 	 w_CLK <= '1';
+wait for 1000 ns;
          w_RST <='0';
+wait for 1000 ns;
 	 
     for i in 1 to 47 loop
         w_CLK <= '0';
