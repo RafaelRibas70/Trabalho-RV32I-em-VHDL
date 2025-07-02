@@ -42,6 +42,7 @@ signal w_S        :  std_logic_vector (31 downto 0);
 ------------------------------------------------------COMEÇO DECLARAÇÃO DE COMPONENTES-----------------------------------------------
 component pc is
   port (
+    i_RST  : in std_logic;
     i_CLK  : in std_logic; -- clock
     i_Data : in std_logic_vector (31 downto 0); 
     o_PC   : out std_logic_vector (31 downto 0) 
@@ -169,6 +170,7 @@ begin
 
 u_PC : pc
 port map(
+	i_RST  => i_RST,
 	i_CLK  => i_CLK,
 	i_Data => w_MUX_DESVIO,--aqui vai receber um desvio ou o pc+4 (que vai ser decidido por um MUX)
 	o_PC   => w_PC_endereco
