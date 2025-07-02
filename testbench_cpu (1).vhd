@@ -9,27 +9,35 @@ architecture teste of testbench_cpu is
 
 component cpu is
 port(
-  i_CLK : in std_logic
+  i_CLK : in std_logic;
+  i_RST : in std_logic
 );
 end component;
 
-signal w_CLK : std_logic;
+signal w_CLK, w_RST : std_logic;
 
 begin
 
 macaco : cpu
 port map(
-  i_CLK => w_CLK
+  i_CLK => w_CLK,
+  i_RST => w_RST
 );
   
 process
 begin
-    for i in 1 to 48 loop
+        -- Reset the CPU (PC = 0, Reg_File = 0)
+        w_RST <= '1';
+        wait for 10 ns;
+        w_RST <= '0';  -- Release reset
+        wait for 10 ns;
+	 
+    for i in 1 to 47 loop
         w_CLK <= '0';
         wait for 1000 ns;
         w_CLK <= '1';
         wait for 1000 ns;
     end loop;
-    wait; -- para parar a simulação
+    wait; 
 end process;
 end;
