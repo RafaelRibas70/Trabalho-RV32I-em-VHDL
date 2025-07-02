@@ -15,6 +15,14 @@ end component;
 
 signal w_CLK : std_logic;
 
+begin
+
+macaco : cpu
+port map(
+  i_CLK => w_CLK;
+);
+
+process begin
 
 w_CLK <= '0';
 wait for 1000 ns;
