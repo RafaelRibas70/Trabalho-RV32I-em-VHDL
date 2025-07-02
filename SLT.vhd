@@ -2,23 +2,23 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity SLT is 
+entity slt32 is 
 port(
     i_A          : in std_logic_vector(31 downto 0);
     i_B          : in std_logic_vector(31 downto 0);
-    o_FLAG_MENOR : out std_logic
+    o_FLAG_MENOR : out std_logic_vector(31 downto 0);
 );
-end SLT;
+end slt32;
 
-architecture arch_signed of SLT is 
+architecture arch_signed of slt32 is 
 begin
 
     process(i_A, i_B)
     begin
         if signed(i_A) < signed(i_B) then
-            o_FLAG_MENOR <= '1';
+            o_FLAG_MENOR <= "00000000000000000000000000000001";
         else
-            o_FLAG_MENOR <= '0';
+            o_FLAG_MENOR <= "00000000000000000000000000000000";
         end if;
     end process;
 
