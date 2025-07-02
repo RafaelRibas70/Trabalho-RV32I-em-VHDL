@@ -21,20 +21,22 @@ begin
 --FEITO COM UMA TABELA VERDADE NO CADERNO
 o_Operacao(0) <= (
                   (not i_Endereco(5) and i_Endereco(4) and not i_Endereco(2) and not i_Endereco(1) and not i_Endereco(0)) or
-						(not i_Endereco(5) and i_Endereco(4) and not i_Endereco(2) and not i_Endereco(1) and i_Endereco(0)) or
-						(i_Endereco(5) and not i_Endereco(4) and i_Endereco(3) and not i_Endereco(2) and not i_Endereco(1) and not i_Endereco(0)) or
-						(i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and i_Endereco(0))
-					  );
+		  (not i_Endereco(5) and i_Endereco(4) and not i_Endereco(2) and not i_Endereco(1) and i_Endereco(0)) or
+		  (i_Endereco(5) and not i_Endereco(4) and i_Endereco(3) and not i_Endereco(2) and not i_Endereco(1) and not i_Endereco(0)) or
+		  (i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and i_Endereco(0)) or
+		  (i_Endereco(5) and not i_Endereco(4) and not i_Endereco(3) and not i_Endereco(2) and i_Endereco(1) and not i_Endereco(0))
+		 );
 						
 o_Operacao(1) <= (
                   (i_Endereco(5) and not i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and i_Endereco(0)) or
-						(i_Endereco(5) and not i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and not i_Endereco(0)) or
-						(i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and i_Endereco(0)) or
-					   (i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and not i_Endereco(0))
+		  (i_Endereco(5) and not i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and not i_Endereco(0)) or
+		  (i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and i_Endereco(0)) or
+		  (i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and i_Endereco(1) and not i_Endereco(0))
                  );
 					  
 o_Operacao(2) <=(
-                 (i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and not i_Endereco(1) and not i_Endereco(0))
-					 );
+                 (i_Endereco(5) and i_Endereco(4) and not i_Endereco(3) and i_Endereco(2) and not i_Endereco(1) and not i_Endereco(0)) or
+		 (i_Endereco(5) and not i_Endereco(4) and not i_Endereco(3) and not i_Endereco(2) and i_Endereco(1) and not i_Endereco(0))
+		);
 
 end architecture;
