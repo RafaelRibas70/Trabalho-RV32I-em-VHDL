@@ -15,7 +15,7 @@ end entity;
 
 architecture arch_ULA of ULA is
 
-signal w_Sadd, w_Ssub, w_Sand, w_Sxor, w_Sor, w_Sslt, w_Ssll, w_Ssrl, w_Ssra : std_logic_vector(31 downto 0);
+signal w_Sadd, w_Ssub, w_Sand, w_Sxor, w_Sor, w_Sslt, w_Ssll, w_Ssrl, w_Ssra, w_Sslt : std_logic_vector(31 downto 0);
 signal w_overflow_add, w_overflow_sub : std_logic;
 
 component add32 is
@@ -53,6 +53,12 @@ port (
 );
 end component;
 
+component slt32 is
+port (
+ i_A    : in std_logic_vector (31 downto 0);
+ i_B    : in std_logic_vector (31 downto 0);
+ o_S    : out std_logic_vector (31 downto 0);
+
 component mux32_8x1 is
 port (
  i_SEL  : in std_logic_vector (2 downto 0);
@@ -61,7 +67,7 @@ port (
  i_C    : in std_logic_vector (31 downto 0);  --AND 
  i_D    : in std_logic_vector (31 downto 0);  --OR
  i_E    : in std_logic_vector (31 downto 0);  --XOR
- i_F    : in std_logic_vector (31 downto 0);
+ i_F    : in std_logic_vector (31 downto 0);  --SLT
  i_G    : in std_logic_vector (31 downto 0);
  i_H    : in std_logic_vector (31 downto 0);
  i_I    : in std_logic_vector (31 downto 0);
@@ -117,6 +123,13 @@ port map(
   o_S => w_Sxor
 );
 
+u_slt : slt32
+port map(
+  i_A => i_A,
+  i_B => i_B,
+  i_S => w_Sslt
+);
+
 u_mux8x1 : mux32_8x1
 port map(
   i_SEL => i_SEL,
@@ -125,7 +138,7 @@ port map(
   i_C   => w_Sand, --AND 010
   i_D   => w_Sor,  --OR  011
   i_E   => w_Sxor, --XOR 100
-  i_F   => "00000000000000000000000000000000",
+  i_F   => w_Sslt, --SLT 101
   i_G   => "00000000000000000000000000000000",
   i_H   => "00000000000000000000000000000000",
   i_I   => "00000000000000000000000000000000",
@@ -144,4 +157,3 @@ port map(
 );
 
 end architecture;
-
