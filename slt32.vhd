@@ -6,7 +6,7 @@ entity slt32 is
 port(
     i_A          : in std_logic_vector(31 downto 0);
     i_B          : in std_logic_vector(31 downto 0);
-    o_FLAG_MENOR : out std_logic_vector(31 downto 0)
+    o_S          : out std_logic_vector(31 downto 0)
 );
 end slt32;
 
@@ -16,9 +16,9 @@ begin
     process(i_A, i_B)
     begin
         if signed(i_A) < signed(i_B) then
-            o_FLAG_MENOR <= "00000000000000000000000000000001";
+            o_S <= "00000000000000000000000000000001";
         else
-            o_FLAG_MENOR <= "00000000000000000000000000000000";
+            o_S <= "00000000000000000000000000000000";
         end if;
     end process;
 
