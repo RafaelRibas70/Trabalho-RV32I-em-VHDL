@@ -30,6 +30,6 @@ begin
         w_CLK <= '1';
         wait for 1000 ns;
     end loop;
-    wait; -- para parar a simulação
+    wait; 
 end process;
 end;
