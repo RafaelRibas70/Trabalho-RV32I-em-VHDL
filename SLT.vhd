@@ -6,7 +6,7 @@ entity slt32 is
 port(
     i_A          : in std_logic_vector(31 downto 0);
     i_B          : in std_logic_vector(31 downto 0);
-    o_FLAG_MENOR : out std_logic_vector(31 downto 0);
+    o_FLAG_MENOR : out std_logic_vector(31 downto 0)
 );
 end slt32;
 
