@@ -17,12 +17,11 @@ begin
   process(i_CLK, i_RST) 
   begin
   
-  end if;
     if (rising_edge(i_CLK)) then
-			if (i_RST = '1')then
-				o_PC <= "00000000000000000000000000000000";
-			else
-				o_PC <= i_Data;
+	if (i_RST = '1')then
+	  o_PC <= "00000000000000000000000000000000";
+	end if;
+	o_PC <= i_Data;
     end if;
 	 
   end process;
