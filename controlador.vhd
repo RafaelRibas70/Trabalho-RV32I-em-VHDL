@@ -37,7 +37,7 @@ begin
         o_BRANCH   <= '0';
         o_MemToReg <= '1';
         o_MemWrite <= '0';
-        o_AluSrc   <= '0';
+        o_AluSrc   <= '1';
         o_RegWrite <= '1';
         o_AluOP    <= "00";
         o_imm_src  <= "00";
@@ -48,7 +48,7 @@ begin
         o_BRANCH   <= '0';
         o_MemToReg <= '0';
         o_MemWrite <= '1';
-        o_AluSrc   <= '0';
+        o_AluSrc   <= '1';
         o_RegWrite <= '0';
         o_AluOP    <= "00";
         o_imm_src  <= "01";
@@ -59,7 +59,7 @@ begin
         o_BRANCH   <= '0';
         o_MemToReg <= '0';
         o_MemWrite <= '0';
-        o_AluSrc   <= '1';
+        o_AluSrc   <= '0';
         o_RegWrite <= '0';
         o_AluOP    <= "10";
         o_imm_src  <= "00";
@@ -70,7 +70,7 @@ begin
         o_BRANCH   <= '0';
         o_MemToReg <= '0';
         o_MemWrite <= '0';
-        o_AluSrc   <= '0'; --i_B da ULA se torna o imediato
+        o_AluSrc   <= '1'; --i_B da ULA se torna o imediato
         o_RegWrite <= '1';
         o_AluOP    <= "11";
         o_imm_src  <= "00";
