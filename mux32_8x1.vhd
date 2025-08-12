@@ -11,10 +11,9 @@ port (
  i_C    : in std_logic_vector (31 downto 0);  --AND
  i_D    : in std_logic_vector (31 downto 0);  --OR
  i_E    : in std_logic_vector (31 downto 0);  --XOR
- i_F    : in std_logic_vector (31 downto 0);  --
+ i_F    : in std_logic_vector (31 downto 0);  --SLT
  i_G    : in std_logic_vector (31 downto 0);  --
  i_H    : in std_logic_vector (31 downto 0);  --
- i_I    : in std_logic_vector (31 downto 0);  --
  o_S    : out std_logic_vector (31 downto 0)
 );
 
@@ -30,8 +29,10 @@ begin
 	           (i_B(i) and i_SEL(0) and (not i_SEL(1)) and (not i_SEL(2))) or       --001 SUB
 	           (i_C(i) and (not i_SEL(0)) and i_SEL(1) and (not i_SEL(2))) or       --010 AND
 				  (i_D(i) and i_SEL(0) and i_SEL(1) and (not i_SEL(2))) or             --011 OR
-				  (i_E(i) and (not i_SEL(0)) and (not i_SEL(1)) and i_SEL(2))          --100 XOR
-				  --Só precisamos dos 5 primeiros
+				  (i_E(i) and (not i_SEL(0)) and (not i_SEL(1)) and i_SEL(2)) or       --100 XOR
+				  (i_F(i) and i_SEL(0) and (not i_SEL(1)) and i_SEL(2)) or             --101 SLT
+				  (i_G(i) and i_SEL(0) and i_SEL(1) and (not i_SEL(2))) or             --110 SLL
+				  (i_H(i) and i_SEL(0) and i_SEL(1) and i_SEL(2))                      --111 SRL
 				  );
   end generate gen_mux32_8x1;
 
