@@ -72,7 +72,6 @@ port (
  i_F    : in std_logic_vector (31 downto 0);  --SLT
  i_G    : in std_logic_vector (31 downto 0);
  i_H    : in std_logic_vector (31 downto 0);
- i_I    : in std_logic_vector (31 downto 0);
  o_S    : out std_logic_vector(31 downto 0)
 );
 end component;
@@ -145,7 +144,6 @@ port map(
   i_F   => w_Sslt, --SLT 101
   i_G   => "00000000000000000000000000000000",
   i_H   => "00000000000000000000000000000000",
-  i_I   => "00000000000000000000000000000000",
   o_S   => o_S
 );
 
@@ -161,3 +159,4 @@ port map(
 );
 
 end architecture;
+
