@@ -4,19 +4,18 @@ use ieee.numeric_std.all;
 
 entity cpu is
 port(
-  i_CLK : in std_logic;
-  i_RST : in std_logic
+  i_Clock : in std_logic;
+  i_Reset : in std_logic
 );
 end entity;
 
 architecture arch_cpu of cpu is
 
 signal w_PC_endereco : std_logic_vector(31 downto 0); -- 
-signal w_instrucao   : std_logic_vector(31 downto 0); -- o_q -- instrução da rom
+signal w_instrucao   : std_logic_vector(31 downto 0); -- o_q -- instru��o da rom
 signal w_data_RD1   : std_logic_vector(31 downto 0); -- valor armazenado dentro do registrador "A" selecionado
 signal w_data_RD2   : std_logic_vector(31 downto 0); -- valor armazenado dentro do registrador "B" selecionado
 signal w_data_out : std_logic_vector(31 downto 0);
-signal w_saida_shift_left    :  std_logic_vector(31 downto 0);
 signal w_desvio_pro_mux_pc : std_logic;
 signal w_MUX_SAIDA_BANCO_REGISTRADOR : std_logic_vector(31 downto 0);
 signal W_MUX_SAIDA_RAM : std_logic_vector(31 downto 0);
@@ -39,7 +38,7 @@ signal w_Overflow :  std_logic;
 signal w_S        :  std_logic_vector (31 downto 0);
 
 
-------------------------------------------------------COMEÇO DECLARAÇÃO DE COMPONENTES-----------------------------------------------
+------------------------------------------------------COME�O DECLARA��O DE COMPONENTES-----------------------------------------------
 component pc is
   port (
     i_RST  : in std_logic;
@@ -68,7 +67,8 @@ port(
   i_WriteData : in std_logic_vector(31 downto 0); --o dado que sera escrito no registrador habilitado
   i_EnableReg : in std_logic_vector(4 downto 0);  --habilita 1 registrador para ser atualiado
   i_CLK       : in std_logic;
-  i_Escrever  : in std_logic;                     --se 1 então tem escrita; se 0 não tem
+  i_RST       : in std_logic;
+  i_Escrever  : in std_logic;                     --se 1 ent�o tem escrita; se 0 n�o tem
   o_RD1       : out std_logic_vector(31 downto 0);
   o_RD2       : out std_logic_vector(31 downto 0)
 );
@@ -77,21 +77,14 @@ end component;
 component data_memory 
     generic (
         DATA_WIDTH : natural := 32;  -- 32 bits para RISC-V
-        ADDR_WIDTH : natural := 10   -- 2^10 endereços = 1KB (1024 palavras de 32 bits)
+        ADDR_WIDTH : natural := 10   -- 2^10 endere�os = 1KB (1024 palavras de 32 bits)
     );
     port (
         clk      : in std_logic;
-        addr     : in std_logic_vector(31 downto 0);  -- Endereço byte-addressable
+        addr     : in std_logic_vector(31 downto 0);  -- Endere�o byte-addressable
         data_in  : in std_logic_vector(DATA_WIDTH-1 downto 0);
         we       : in std_logic;  -- Write Enable
         data_out : out std_logic_vector(DATA_WIDTH-1 downto 0)
-    );
-end component;
-
-component shif_left_1 
-    port (
-      i_entrada_imediato  : in  std_logic_vector(31 downto 0);
-		o_saida_imediato    : out std_logic_vector(31 downto 0)
     );
 end component;
 
@@ -164,14 +157,14 @@ port(
 );
 end component;
 
-------------------------------------------------------FIM DECLARAÇÃO DE COMPONENTES-----------------------------------------------
+------------------------------------------------------FIM DECLARA��O DE COMPONENTES-----------------------------------------------
 
 begin
 
 u_PC : pc
 port map(
-	i_RST  => i_RST,
-	i_CLK  => i_CLK,
+	i_RST  => i_Reset,
+	i_CLK  => i_Clock,
 	i_Data => w_MUX_DESVIO,--aqui vai receber um desvio ou o pc+4 (que vai ser decidido por um MUX)
 	o_PC   => w_PC_endereco
 );
@@ -182,9 +175,9 @@ generic map(
 	ADDR_WIDTH => 8
 )
 port map(
-	clk     => i_CLK,
-	addr_in => w_PC_endereco, --recebe o endereço do PC
-	q       => w_instrucao    --sai a instrução atual
+	clk     => i_Clock,
+	addr_in => w_PC_endereco, --recebe o endere�o do PC
+	q       => w_instrucao    --sai a instru��o atual
 );
 
 u_CONTROL : controlador 
@@ -206,7 +199,8 @@ port map(
 	i_R2        =>  w_instrucao (24 downto 20),
 	i_WriteData =>  W_MUX_SAIDA_RAM, -- saida mux da ula
 	i_EnableReg =>  w_instrucao (11 downto 7),
-	i_CLK       =>  i_CLK,
+	i_CLK       =>  i_Clock,
+	i_RST       =>  i_Reset,
 	i_Escrever  =>  w_RegWrit,-- o_RegWrite do control
 	o_RD1       =>  w_data_RD1,
 	o_RD2       =>  w_data_RD2
@@ -223,8 +217,8 @@ port map(
 u_MUX_SAIDA_RAM : mux32
 port map(
 	i_SEL  =>  w_MemToReg,
-	i_A    =>  w_data_out, --saida memoria ram
-	i_B    =>  w_S,--saida ULA
+	i_A    =>  w_S,       -- saida da ULA
+	i_B    =>  w_data_out,-- saida da RAM
 	o_S    =>  W_MUX_SAIDA_RAM
 );
 
@@ -239,13 +233,13 @@ port map(
 u_RAM :data_memory 
     generic map(
         DATA_WIDTH => 32,  -- 32 bits para RISC-V
-        ADDR_WIDTH => 10   -- 2^10 endereços = 1KB (1024 palavras de 32 bits)
+        ADDR_WIDTH => 10   -- 2^10 endere�os = 1KB (1024 palavras de 32 bits)
     )
     port map(
-        clk      => i_CLK,
+        clk      => i_Clock,
         addr     => w_S,--saida ULA
         data_in  => w_data_RD2,
-        we       => w_MemWrit,  -- Write Enable
+        we        => w_MemWrit,  -- Write Enable
         data_out => w_data_out
     );
 	 
@@ -256,13 +250,6 @@ u_extensor_sinal : extensor_sinal
         o_inteiro   =>  w_Saida_extensor
     );
 	 
-
-u_shif_left_1 : shif_left_1 
-port map(
-	i_entrada_imediato  => w_Saida_extensor,
-	o_saida_imediato    => w_saida_shift_left
-);
-
 u_ULA : ULA
 port map(
   i_A        => w_data_RD1,
@@ -285,7 +272,7 @@ u_decodificador : muxPC_control
 u_add_desvio : add32    
 port map(
  i_A    => w_PC_endereco,
- i_B    => w_saida_shift_left,
+ i_B    => w_Saida_extensor,
  i_CIN  => '0',
  o_S    => w_saida_add_desvio,
  o_COUT => w_terra

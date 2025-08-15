@@ -43,9 +43,9 @@ architecture rtl of rom is
 		  tmp(16) := "00000001011100101010111000100011";
 		  tmp(17) := "00000000100000000000111110010011";
 		  tmp(18) := "00000000000000101010010000000011";
-		  tmp(19) := "00000000010100000000010010110011";
+		  tmp(19) := "00000000010100000000010010110011"; 
 		  tmp(20) := "00000000010100101000100100110011";
-		  tmp(21) := "00000000011110010000100100110011";
+		  tmp(21) := "00000001001010010000100100110011";
 		  tmp(22) := "00000000000010010010001100000011";
 		  tmp(23) := "00000000011001000010001110110011";
 		  tmp(24) := "00000000000100000000111000010011";
@@ -88,12 +88,7 @@ begin
     -- Converter o addr_in de bytes para índice de instrução
     word_addr <= to_integer(unsigned(addr_in(ADDR_WIDTH+1 downto 2)));
 
-    -- Leitura sincronizada
-    process(clk)
-    begin
-        if rising_edge(clk) then
+    -- Leitura assincrona
             q <= rom(word_addr);
-        end if;
-    end process;
 
 end rtl;

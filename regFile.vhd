@@ -9,6 +9,7 @@ port(
   i_WriteData : in std_logic_vector(31 downto 0); --o dado que sera escrito no registrador habilitado
   i_EnableReg : in std_logic_vector(4 downto 0);  --habilita 1 registrador para ser atualiado
   i_CLK       : in std_logic;
+  i_RST       : in std_logic;
   i_Escrever  : in std_logic;                     --se 1 então tem escrita; se 0 não tem
   o_RD1       : out std_logic_vector(31 downto 0);
   o_RD2       : out std_logic_vector(31 downto 0)
@@ -24,6 +25,7 @@ signal w_EnableReg : std_logic_vector(31 downto 0);
 component registrador is
 port (
   i_CLK     : in std_logic; -- clock
+  i_RST     : in std_logic;
   i_Enable  : in std_logic;
   i_Escrever: in std_logic;
   i_D       : in std_logic_vector (31 downto 0); 
@@ -89,6 +91,7 @@ gen_registrador: for i in 0 to 31 generate
   reg: registrador
   port map(
     i_CLK      => i_CLK,
+	 i_RST      => i_RST,
     i_D        => i_WriteData,
     i_Enable   => w_EnableReg(i),
 	 i_Escrever => i_Escrever,

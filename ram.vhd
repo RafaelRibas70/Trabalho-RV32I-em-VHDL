@@ -35,26 +35,18 @@ begin
     -- Processo de escrita/leitura sincronizada
     process(clk)
     begin
-        if rising_edge(clk) then
-            -- Operação de escrita tem prioridade
+        if falling_edge(clk) then
             if we = '1' then
                 if word_addr < 2**ADDR_WIDTH then
                     ram(word_addr) <= data_in;
                 else
-                    report "Endereço de escrita fora dos limites: " & integer'image(word_addr)
-                    severity warning;
+                    report "Endere�o de escrita fora dos limites" severity warning;
                 end if;
             end if;
-            
-            -- Operação de leitura
-                if word_addr < 2**ADDR_WIDTH then
-                    data_out <= ram(word_addr);
-                else
-                    data_out <= (others => '0');
-                    report "Endereço de leitura fora dos limites: " & integer'image(word_addr)
-                    severity warning;
-                end if;
-            end if;
+        end if;
     end process;
 
+    -- Leitura ass�ncrona (combinacional)
+    data_out <= ram(word_addr) when word_addr < 2**ADDR_WIDTH else 
+               (others => '0');
 end rtl;

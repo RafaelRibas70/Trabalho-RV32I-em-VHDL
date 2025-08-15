@@ -8,7 +8,7 @@ port(
   --i_Entrada(3) => JUMP do controle
   --i_Entrada(2) => BRANCH do controle
   --i_Entrada(1) => bit (12) da instrução (FUNCT3 usado para diferenciar BEQ do BNE)
-  --0 -> BEQ; 1 -> BNE
+    --0 -> BEQ; 1 -> BNE
   --i_Entrada(0) => Zero flag
   o_Desvio : out std_logic
 );

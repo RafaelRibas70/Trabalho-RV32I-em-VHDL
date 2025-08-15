@@ -18,55 +18,86 @@ end entity;
 
 architecture arch_controlador of controlador is
 begin
+  process (i_opcode)
+  begin
+    -- Default values
+    o_JUMP     <= '0';
+    o_BRANCH   <= '0';
+    o_MemToReg <= '0';
+    o_MemWrite <= '0';
+    o_AluSrc   <= '0';
+    o_RegWrite <= '0';
+    o_AluOP    <= "00";
+    o_imm_src  <= "00";
 
-o_JUMP     <= (i_opcode(6) and i_opcode(5) and not i_opcode(4) and i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0));
---1101111 JUMP
+    case i_opcode is
+      -- Load Word
+      when "0000011" => 
+        o_JUMP     <= '0';
+        o_BRANCH   <= '0';
+        o_MemToReg <= '1';
+        o_MemWrite <= '0';
+        o_AluSrc   <= '1';
+        o_RegWrite <= '1';
+        o_AluOP    <= "00";
+        o_imm_src  <= "00";
 
-o_BRANCH   <= (i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0));
---1100011 FORMATO B
+      -- FORMATO SW
+      when "0100011" => 
+        o_JUMP     <= '0';
+        o_BRANCH   <= '0';
+        o_MemToReg <= '0';
+        o_MemWrite <= '1';
+        o_AluSrc   <= '1';
+        o_RegWrite <= '0';
+        o_AluOP    <= "00";
+        o_imm_src  <= "01";
 
-o_MemToReg <= (not i_opcode(6) and not i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0));
---0000011 LOAD WORD
-				  
-o_MemWrite <= (not i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0));
---0100011 STORE WORD
+      -- Formato R
+      when "0110011" => 
+        o_JUMP     <= '0';
+        o_BRANCH   <= '0';
+        o_MemToReg <= '0';
+        o_MemWrite <= '0';
+        o_AluSrc   <= '0';
+        o_RegWrite <= '1';
+        o_AluOP    <= "10";
+        o_imm_src  <= "00";
+		  
+		-- FORMATO I
+      when "0010011" => 
+        o_JUMP     <= '0';
+        o_BRANCH   <= '0';
+        o_MemToReg <= '0';
+        o_MemWrite <= '0';
+        o_AluSrc   <= '1'; --i_B da ULA se torna o imediato
+        o_RegWrite <= '1';
+        o_AluOP    <= "11";
+        o_imm_src  <= "00";
 
-o_AluSrc   <=(
-              (i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-				  (not i_opcode(6) and not i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-				  (not i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0))
-             );
---FORMATO I OU LOAD WORD OU STORE WORD
+      -- Branches (B-type)
+      when "1100011" => 
+        o_JUMP     <= '0';
+        o_BRANCH   <= '1';
+        o_MemToReg <= '0';
+        o_MemWrite <= '0';
+        o_AluSrc   <= '0';
+        o_RegWrite <= '0';
+        o_AluOP    <= "01";
+        o_imm_src  <= "10";
 
-o_RegWrite <= (
-               (not i_opcode(6) and not i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-					(not i_opcode(6) and i_opcode(5) and i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-					(i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0))
-				  );
---0000011 LOAD WORD - FORMATO R - FORMATO I
+      -- JAL (J-type)
+      when "1101111" => 
+        o_JUMP     <= '1';
+        o_BRANCH   <= '0';
+        o_MemToReg <= '0';
+        o_MemWrite <= '0';
+        o_AluSrc   <= '0';
+        o_RegWrite <= '0';
+        o_AluOP    <= "00";
+        o_imm_src  <= "11";
 
-o_AluOP(0) <= (
-               (i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-					(i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0))
-              );
---OP1: BRANCH E FORMATO I
-
-o_AluOP(1) <= (
-               (not i_opcode(6) and i_opcode(5) and i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-					(i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0))
-              );
---OP2: FORMATO I E FORMATO R
-
-o_imm_src(0) <= (
-                 (not i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-					  (i_opcode(6) and i_opcode(5) and not i_opcode(4) and i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0))
-                );
---SW - JUMP
-
-o_imm_src(1) <= (
-                 (i_opcode(6) and i_opcode(5) and not i_opcode(4) and not i_opcode(3) and not i_opcode(2) and i_opcode(1) and i_opcode(0)) or
-					  (i_opcode(6) and i_opcode(5) and not i_opcode(4) and i_opcode(3) and i_opcode(2) and i_opcode(1) and i_opcode(0))
-                );
---FORMATO B - JUMP
-
+      when others => null;
+    end case;
+  end process;
 end architecture;

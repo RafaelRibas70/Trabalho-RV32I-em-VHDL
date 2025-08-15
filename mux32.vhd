@@ -18,7 +18,7 @@ begin
 
   gen_mux32 : for i in 0 to 31 generate
   begin
-    o_S(i) <= (i_A(i) and i_SEL) or (i_B(i) and not i_SEL);
+    o_S(i) <= (i_A(i) and not i_SEL) or (i_B(i) and i_SEL);
   end generate gen_mux32;
 
 end arch_mux;

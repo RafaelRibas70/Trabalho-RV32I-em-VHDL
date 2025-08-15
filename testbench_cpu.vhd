@@ -9,8 +9,8 @@ architecture teste of testbench_cpu is
 
 component cpu is
 port(
-  i_CLK : in std_logic;
-  i_RST : in std_logic
+  i_Clock : in std_logic;
+  i_Reset : in std_logic
 );
 end component;
 
@@ -20,22 +20,26 @@ begin
 
 macaco : cpu
 port map(
-  i_CLK => w_CLK,
-  i_RST => w_RST
+  i_Clock => w_CLK,
+  i_Reset => w_RST
 );
   
 process
 begin
     w_RST <= '1';
-	 w_CLK <= '0';
-wait for 1000 ns;
-	 w_RST <= '1';
-	 w_CLK <= '1';
-wait for 1000 ns;
-         w_RST <='0';
-wait for 1000 ns;
+    w_CLK <= '0';
+wait for 5 ns;
+    w_CLK <= '1';
+wait for 5 ns;
+    w_CLK <= '0';
+wait for 5 ns;
+    w_CLK <= '1';
+wait for 5 ns;
+    w_RST <= '0';
+    w_CLK <= '0';
+wait for 5 ns;
 	 
-    for i in 1 to 47 loop
+    for i in 1 to 100 loop
         w_CLK <= '0';
         wait for 1000 ns;
         w_CLK <= '1';

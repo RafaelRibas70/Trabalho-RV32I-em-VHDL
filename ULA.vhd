@@ -64,14 +64,14 @@ end component;
 component mux32_8x1 is
 port (
  i_SEL  : in std_logic_vector (2 downto 0);
- i_A    : in std_logic_vector (31 downto 0);  --ADD 000
- i_B    : in std_logic_vector (31 downto 0);  --SUB 001
- i_C    : in std_logic_vector (31 downto 0);  --AND 010
- i_D    : in std_logic_vector (31 downto 0);  --OR  011
- i_E    : in std_logic_vector (31 downto 0);  --XOR 100
- i_F    : in std_logic_vector (31 downto 0);  --SLT 101
- i_G    : in std_logic_vector (31 downto 0);  --SLL 110
- i_H    : in std_logic_vector (31 downto 0);  --SRL 111
+ i_A    : in std_logic_vector (31 downto 0);  --ADD 
+ i_B    : in std_logic_vector (31 downto 0);  --SUB 
+ i_C    : in std_logic_vector (31 downto 0);  --AND 
+ i_D    : in std_logic_vector (31 downto 0);  --OR
+ i_E    : in std_logic_vector (31 downto 0);  --XOR
+ i_F    : in std_logic_vector (31 downto 0);  --SLT
+ i_G    : in std_logic_vector (31 downto 0);
+ i_H    : in std_logic_vector (31 downto 0);
  o_S    : out std_logic_vector(31 downto 0)
 );
 end component;
@@ -85,7 +85,7 @@ end component;
 
 begin
 
-w_negado_B <= not i_B;
+w_negado_B <= i_B xor ("11111111111111111111111111111111");
 
 u_add : add32
 port map(
@@ -100,7 +100,7 @@ u_sub : add32
 port map(
   i_A    => i_A,
   i_B    => w_negado_B,
-  i_CIN  => '1',
+  i_CIN  => '0',
   o_S    => w_Ssub,
   o_COUT => w_overflow_sub
 );
@@ -159,5 +159,4 @@ port map(
 );
 
 end architecture;
-
 
